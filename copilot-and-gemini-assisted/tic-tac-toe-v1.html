@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Tic Tac Toe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f172a;
+            color: white;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .cell {
+            aspect-ratio: 1 / 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            font-weight: 700;
+            background: rgba(30, 41, 59, 0.7);
+            border: 2px solid #334155;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cell:hover {
+            background: rgba(51, 65, 85, 0.8);
+            border-color: #6366f1;
+        }
+
+        .cell.x {
+            color: #60a5fa;
+            text-shadow: 0 0 15px rgba(96, 165, 250, 0.5);
+        }
+
+        .cell.o {
+            color: #f472b6;
+            text-shadow: 0 0 15px rgba(244, 114, 182, 0.5);
+        }
+
+        .winner-line {
+            animation: pulse 1s infinite;
+            background-color: #22c55e !important;
+            border-color: #4ade80 !important;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .status-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="w-full max-w-md p-6">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-pink-500 mb-2">
+                Tic Tac Toe
+            </h1>
+            <p id="status" class="text-slate-400 text-lg">Player <span class="text-blue-400 font-bold">X</span>'s turn</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="status-card p-3 rounded-xl text-center">
+                <p class="text-xs uppercase tracking-widest text-slate-500">Player X</p>
+                <p id="score-x" class="text-2xl font-bold text-blue-400">0</p>
+            </div>
+            <div class="status-card p-3 rounded-xl text-center">
+                <p class="text-xs uppercase tracking-widest text-slate-500">Player O</p>
+                <p id="score-o" class="text-2xl font-bold text-pink-400">0</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 mb-8" id="board">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+
+        <div class="flex flex-col gap-3">
+            <button id="resetBtn" class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-500/20 active:scale-95">
+                New Round
+            </button>
+            <button id="clearScores" class="w-full py-2 text-slate-500 hover:text-slate-300 text-sm transition-colors">
+                Reset Scoreboard
+            </button>
+        </div>
+    </div>
+
+    <!-- Custom Modal for Game Over -->
+    <div id="modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl max-w-xs w-full text-center shadow-2xl">
+            <h2 id="modal-title" class="text-3xl font-bold mb-4">Winner!</h2>
+            <p id="modal-msg" class="text-slate-400 mb-6 text-lg"></p>
+            <button id="modalBtn" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg transition-all">
+                Play Again
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const board = document.getElementById('board');
+        const cells = document.querySelectorAll('.cell');
+        const statusText = document.getElementById('status');
+        const resetBtn = document.getElementById('resetBtn');
+        const clearScoresBtn = document.getElementById('clearScores');
+        const scoreXElement = document.getElementById('score-x');
+        const scoreOElement = document.getElementById('score-o');
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMsg = document.getElementById('modal-msg');
+        const modalBtn = document.getElementById('modalBtn');
+
+        let currentPlayer = 'X';
+        let gameState = ["", "", "", "", "", "", "", "", ""];
+        let gameActive = true;
+        let scoreX = 0;
+        let scoreO = 0;
+
+        const winningConditions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        function handleCellClick(e) {
+            const clickedCell = e.target;
+            const index = parseInt(clickedCell.getAttribute('data-index'));
+
+            if (gameState[index] !== "" || !gameActive) return;
+
+            makeMove(clickedCell, index);
+            checkResult();
+        }
+
+        function makeMove(cell, index) {
+            gameState[index] = currentPlayer;
+            cell.innerText = currentPlayer;
+            cell.classList.add(currentPlayer.toLowerCase());
+        }
+
+        function checkResult() {
+            let roundWon = false;
+            let winningCombo = [];
+
+            for (let condition of winningConditions) {
+                const [a, b, c] = condition;
+                if (gameState[a] && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
+                    roundWon = true;
+                    winningCombo = condition;
+                    break;
+                }
+            }
+
+            if (roundWon) {
+                gameActive = false;
+                winningCombo.forEach(i => cells[i].classList.add('winner-line'));
+                
+                if (currentPlayer === 'X') {
+                    scoreX++;
+                    scoreXElement.innerText = scoreX;
+                } else {
+                    scoreO++;
+                    scoreOElement.innerText = scoreO;
+                }
+                
+                showModal('Winner!', `Player ${currentPlayer} has won the match!`);
+                return;
+            }
+
+            if (!gameState.includes("")) {
+                gameActive = false;
+                showModal('Draw!', "The game ended in a tie.");
+                return;
+            }
+
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            statusText.innerHTML = `Player <span class="${currentPlayer === 'X' ? 'text-blue-400' : 'text-pink-400'} font-bold">${currentPlayer}</span>'s turn`;
+        }
+
+        function showModal(title, msg) {
+            setTimeout(() => {
+                modalTitle.innerText = title;
+                modalMsg.innerText = msg;
+                modalTitle.className = `text-3xl font-bold mb-4 ${title === 'Draw!' ? 'text-slate-300' : (currentPlayer === 'X' ? 'text-blue-400' : 'text-pink-400')}`;
+                modal.classList.remove('hidden');
+            }, 500);
+        }
+
+        function resetGame() {
+            currentPlayer = 'X';
+            gameState = ["", "", "", "", "", "", "", "", ""];
+            gameActive = true;
+            statusText.innerHTML = `Player <span class="text-blue-400 font-bold">X</span>'s turn`;
+            cells.forEach(cell => {
+                cell.innerText = "";
+                cell.className = "cell";
+            });
+            modal.classList.add('hidden');
+        }
+
+        function clearScores() {
+            scoreX = 0;
+            scoreO = 0;
+            scoreXElement.innerText = "0";
+            scoreOElement.innerText = "0";
+            resetGame();
+        }
+
+        cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+        resetBtn.addEventListener('click', resetGame);
+        modalBtn.addEventListener('click', resetGame);
+        clearScoresBtn.addEventListener('click', clearScores);
+
+    </script>
+</body>
+</html>
