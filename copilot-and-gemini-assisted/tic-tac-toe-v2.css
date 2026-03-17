@@ -102,3 +102,22 @@ body.light-mode .status-card {
 #modal {
     transition: background-color 0.3s ease;
 }
+
+#themeToggle {
+    background-color: #1e293b;
+    color: white;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#themeToggle:hover {
+    background-color: #334155;
+}
+
+body.light-mode #themeToggle {
+    background-color: #e2e8f0;
+    color: #1e293b;
+}
+
+body.light-mode #themeToggle:hover {
+    background-color: #cbd5e1;
+}
