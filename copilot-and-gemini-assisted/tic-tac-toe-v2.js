@@ -9,6 +9,8 @@ const modal = document.getElementById('modal');
 const modalTitle = document.getElementById('modal-title');
 const modalMsg = document.getElementById('modal-msg');
 const modalBtn = document.getElementById('modalBtn');
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
 
 let currentPlayer = 'X';
 let gameState = ["", "", "", "", "", "", "", "", ""];
@@ -74,14 +76,24 @@ function checkResult() {
     }
 
     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-    statusText.innerHTML = `Player <span class="${currentPlayer === 'X' ? 'text-blue-400' : 'text-pink-400'} font-bold">${currentPlayer}</span>'s turn`;
+    const isLightMode = document.body.classList.contains('light-mode');
+    const colorClass = currentPlayer === 'X' 
+        ? (isLightMode ? 'text-blue-600' : 'text-blue-400') 
+        : (isLightMode ? 'text-pink-600' : 'text-pink-400');
+    statusText.innerHTML = `Player <span class="${colorClass} font-bold">${currentPlayer}</span>'s turn`;
 }
 
 function showModal(title, msg) {
     setTimeout(() => {
         modalTitle.innerText = title;
         modalMsg.innerText = msg;
-        modalTitle.className = `text-3xl font-bold mb-4 ${title === 'Draw!' ? 'text-slate-300' : (currentPlayer === 'X' ? 'text-blue-400' : 'text-pink-400')}`;
+        const isLightMode = document.body.classList.contains('light-mode');
+        const titleColor = title === 'Draw!' 
+            ? (isLightMode ? 'text-slate-700' : 'text-slate-300')
+            : (currentPlayer === 'X' 
+                ? (isLightMode ? 'text-blue-600' : 'text-blue-400')
+                : (isLightMode ? 'text-pink-600' : 'text-pink-400'));
+        modalTitle.className = `text-3xl font-bold mb-4 ${titleColor}`;
         modal.classList.remove('hidden');
     }, 500);
 }
@@ -90,7 +102,9 @@ function resetGame() {
     currentPlayer = 'X';
     gameState = ["", "", "", "", "", "", "", "", ""];
     gameActive = true;
-    statusText.innerHTML = `Player <span class="text-blue-400 font-bold">X</span>'s turn`;
+    const isLightMode = document.body.classList.contains('light-mode');
+    const colorClass = isLightMode ? 'text-blue-600' : 'text-blue-400';
+    statusText.innerHTML = `Player <span class="${colorClass} font-bold">X</span>'s turn`;
     cells.forEach(cell => {
         cell.innerText = "";
         cell.className = "cell";
@@ -106,7 +120,33 @@ function clearScores() {
     resetGame();
 }
 
+function initializeTheme() {
+    const savedTheme = localStorage.getItem('tictactoe-theme') || 'dark';
+    setTheme(savedTheme);
+}
+
+function setTheme(theme) {
+    if (theme === 'light') {
+        document.body.classList.add('light-mode');
+        themeIcon.innerText = '☀️';
+        localStorage.setItem('tictactoe-theme', 'light');
+    } else {
+        document.body.classList.remove('light-mode');
+        themeIcon.innerText = '🌙';
+        localStorage.setItem('tictactoe-theme', 'dark');
+    }
+}
+
+function toggleTheme() {
+    const currentTheme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+}
+
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));
 resetBtn.addEventListener('click', resetGame);
 modalBtn.addEventListener('click', resetGame);
 clearScoresBtn.addEventListener('click', clearScores);
+themeToggle.addEventListener('click', toggleTheme);
+
+initializeTheme();
