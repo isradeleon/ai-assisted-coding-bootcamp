@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Software Engineer Portfolio</title>
+
+<style>
+
+:root{
+  --bg:#0b0f1a;
+  --bg2:#111827;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+  --accent:#6366f1;
+  --accent2:#22d3ee;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:radial-gradient(circle at 10% 10%, #1f2937 0%, #020617 60%);
+  color:var(--text);
+  line-height:1.6;
+}
+
+/* NAV */
+
+nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:22px 30px;
+  max-width:1200px;
+  margin:auto;
+}
+
+.nav-links{
+  display:flex;
+  gap:28px;
+}
+
+nav a{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:0.9rem;
+  transition:.2s;
+}
+
+nav a:hover{
+  color:white;
+}
+
+/* HERO */
+
+header{
+  padding:160px 20px 140px;
+  text-align:center;
+  max-width:900px;
+  margin:auto;
+  position:relative;
+}
+
+header::before{
+  content:"";
+  position:absolute;
+  inset:-200px;
+  background:radial-gradient(circle at 30% 30%, rgba(99,102,241,.35), transparent 40%),
+             radial-gradient(circle at 70% 60%, rgba(34,211,238,.35), transparent 45%);
+  filter:blur(90px);
+  z-index:-1;
+  animation:float 10s ease-in-out infinite alternate;
+}
+
+@keyframes float{
+  from{transform:translateY(-30px)}
+  to{transform:translateY(30px)}
+}
+
+header h1{
+  font-size:clamp(2.5rem,6vw,3.6rem);
+  margin-bottom:20px;
+  letter-spacing:-1px;
+}
+
+#typing{
+  font-size:1.3rem;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.hero-buttons{
+  margin-top:35px;
+}
+
+/* GRADIENT BUTTON */
+
+.btn{
+  display:inline-block;
+  padding:12px 22px;
+  border-radius:999px;
+  font-size:.9rem;
+  text-decoration:none;
+  color:white;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  box-shadow:0 8px 25px rgba(99,102,241,.4);
+  transition:.25s;
+}
+
+.btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 14px 35px rgba(99,102,241,.6);
+}
+
+/* SECTIONS */
+
+section{
+  max-width:1200px;
+  margin:auto;
+  padding:90px 25px;
+}
+
+.section-title{
+  font-size:2rem;
+  margin-bottom:40px;
+}
+
+.about p{
+  color:var(--muted);
+  max-width:700px;
+}
+
+/* GRID */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:26px;
+}
+
+/* GLASS CARDS */
+
+.card{
+  background:rgba(255,255,255,0.04);
+  backdrop-filter:blur(12px);
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.08);
+  transition:transform .25s ease, box-shadow .25s ease;
+  overflow:hidden;
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 20px 40px rgba(0,0,0,.45);
+}
+
+.card-content{
+  padding:24px;
+}
+
+.card img{
+  width:100%;
+  height:160px;
+  object-fit:cover;
+}
+
+.card h3{margin-bottom:10px}
+
+.card p{
+  color:var(--muted);
+  font-size:0.9rem;
+  margin-bottom:12px;
+}
+
+.project-links a{
+  font-size:.85rem;
+  margin-right:12px;
+  color:var(--accent2);
+  text-decoration:none;
+}
+
+.project-links a:hover{
+  text-decoration:underline;
+}
+
+/* EXPERIENCE */
+
+.job{
+  margin-bottom:30px;
+  padding:22px;
+  border-radius:14px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+  transition:.25s;
+}
+
+.job:hover{
+  transform:translateY(-4px);
+}
+
+.job span{
+  color:var(--muted);
+  font-size:.9rem;
+}
+
+.job p{
+  color:var(--muted);
+  margin-top:6px;
+}
+
+/* FOOTER */
+
+footer{
+  text-align:center;
+  padding:70px 20px;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+
+.contact-links{
+  margin-top:15px;
+}
+
+.contact-links a{
+  color:var(--accent2);
+  margin:0 10px;
+  text-decoration:none;
+}
+
+.contact-links a:hover{
+  text-decoration:underline;
+}
+
+footer p{
+  color:var(--muted);
+  font-size:0.9rem;
+}
+
+/* SCROLL REVEAL */
+
+.reveal{
+  opacity:0;
+  transform:translateY(40px);
+  transition:all .8s ease;
+}
+
+.reveal.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* MOBILE MENU */
+
+.menu-btn{
+  display:none;
+  cursor:pointer;
+  font-size:1.3rem;
+}
+
+@media (max-width:768px){
+
+.menu-btn{display:block}
+
+.nav-links{
+  position:absolute;
+  top:70px;
+  left:0;
+  right:0;
+  background:#020617;
+  flex-direction:column;
+  align-items:center;
+  gap:22px;
+  padding:30px;
+  display:none;
+}
+
+.nav-links.active{display:flex}
+
+nav{position:relative}
+
+header{padding:130px 20px 110px}
+
+}
+
+  /* Prevent layout shift when typing text clears */
+  #typing-text, .typing-text {
+    display: inline-block;
+    min-height: 1.5em;
+    position: relative;
+  }
+
+  /* Blinking cursor */
+  #typing-text::after {
+    content: "|";
+    margin-left: 4px;
+    animation: blinkCursor 1s infinite;
+    opacity: 1;
+  }
+
+  @keyframes blinkCursor {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
+  }
+
+</style>
+</head>
+
+<body>
+
+<nav>
+
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<div class="nav-links" id="navLinks">
+<a href="#about">About</a>
+<a href="#skills">Skills</a>
+<a href="#portfolio">Portfolio</a>
+<a href="#experience">Experience</a>
+<a href="#contact">Contact</a>
+</div>
+
+</nav>
+
+<header class="reveal">
+<h1>Your Name</h1>
+<p><span id="typing"></span></p>
+
+<div class="hero-buttons">
+<a class="btn" href="#portfolio">View Projects</a>
+</div>
+
+</header>
+
+<section id="about" class="about reveal">
+<h2 class="section-title">About</h2>
+<p>
+I am a software engineer focused on building reliable and scalable applications. I enjoy solving complex problems, designing efficient systems, and creating software that improves people's lives.
+</p>
+</section>
+
+<section id="skills" class="reveal">
+<h2 class="section-title">Tech Stack</h2>
+
+<div class="grid">
+
+<div class="card"><div class="card-content"><h3>Languages</h3><p>JavaScript, Python, Go, Java</p></div></div>
+<div class="card"><div class="card-content"><h3>Frontend</h3><p>HTML, CSS, React, Next.js</p></div></div>
+<div class="card"><div class="card-content"><h3>Backend</h3><p>Node.js, Express, REST APIs</p></div></div>
+<div class="card"><div class="card-content"><h3>Database</h3><p>PostgreSQL, MongoDB, Redis</p></div></div>
+<div class="card"><div class="card-content"><h3>Cloud & DevOps</h3><p>AWS, Docker, CI/CD</p></div></div>
+<div class="card"><div class="card-content"><h3>Tools</h3><p>Git, Linux, VS Code</p></div></div>
+
+</div>
+
+</section>
+
+<section id="portfolio" class="reveal">
+<h2 class="section-title">Portfolio</h2>
+
+<div class="grid">
+
+<div class="card">
+<img src="https://picsum.photos/500/300?1">
+<div class="card-content">
+<h3>Project One</h3>
+<p>Short description of your project, technologies used, and what problem it solves.</p>
+<div class="project-links">
+<a href="#">Live Demo</a>
+<a href="#">GitHub</a>
+</div>
+</div>
+</div>
+
+<div class="card">
+<img src="https://picsum.photos/500/300?2">
+<div class="card-content">
+<h3>Project Two</h3>
+<p>Short description of your project, technologies used, and what problem it solves.</p>
+<div class="project-links">
+<a href="#">Live Demo</a>
+<a href="#">GitHub</a>
+</div>
+</div>
+</div>
+
+<div class="card">
+<img src="https://picsum.photos/500/300?3">
+<div class="card-content">
+<h3>Project Three</h3>
+<p>Short description of your project, technologies used, and what problem it solves.</p>
+<div class="project-links">
+<a href="#">Live Demo</a>
+<a href="#">GitHub</a>
+</div>
+</div>
+</div>
+
+</div>
+
+</section>
+
+<section id="experience" class="reveal">
+<h2 class="section-title">Job Experience</h2>
+
+<div class="job">
+<h3>Senior Software Engineer</h3>
+<span>Company Name • 2022 - Present</span>
+<p>Worked on backend systems, APIs, and scalable cloud infrastructure.</p>
+</div>
+
+<div class="job">
+<h3>Software Engineer</h3>
+<span>Company Name • 2019 - 2022</span>
+<p>Developed web applications and improved system performance.</p>
+</div>
+
+</section>
+
+<footer id="contact" class="reveal">
+<p>Contact</p>
+
+<div class="contact-links">
+<a href="#">Email</a>
+<a href="#">GitHub</a>
+<a href="#">LinkedIn</a>
+</div>
+
+<p style="margin-top:15px">© 2026 Your Name</p>
+
+</footer>
+
+<script>
+
+function toggleMenu(){
+  const nav=document.getElementById("navLinks");
+  nav.classList.toggle("active");
+}
+
+/* typing animation */
+
+const roles=[
+  "Software Engineer",
+  "Backend Developer",
+  "Cloud Enthusiast",
+  "Problem Solver"
+];
+
+let roleIndex=0;
+let charIndex=0;
+let deleting=false;
+
+const typingElement=document.getElementById("typing");
+
+function type(){
+
+const current=roles[roleIndex];
+
+if(!deleting){
+  typingElement.textContent=current.slice(0,charIndex++);
+}else{
+  typingElement.textContent=current.slice(0,charIndex--);
+}
+
+if(charIndex===current.length+1){
+  deleting=true;
+  setTimeout(type,1000);
+  return;
+}
+
+if(charIndex===0){
+  deleting=false;
+  roleIndex=(roleIndex+1)%roles.length;
+}
+
+setTimeout(type,deleting?40:80);
+
+}
+
+type();
+
+/* SCROLL REVEAL */
+
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("visible");
+}
+});
+},{threshold:.15});
+
+document.querySelectorAll(".reveal").forEach(el=>{
+observer.observe(el);
+});
+
+</script>
+
+</body>
+</html>
