@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import initialProducts from '../data/products';
 
-function useCart() {
+const CartContext = createContext();
+
+export function CartProvider({ children }) {
     const [items, setItems] = useState(initialProducts);
 
     const toggleCart = (itemId) => {
@@ -32,7 +34,7 @@ function useCart() {
     const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
 
-    return {
+    const value = {
         items,
         cartItems,
         totalItems,
@@ -40,6 +42,18 @@ function useCart() {
         toggleCart,
         changeQuantity
     };
+
+    return (
+        <CartContext.Provider value={value}>
+            {children}
+        </CartContext.Provider>
+    );
 }
 
-export default useCart;
+export function useCart() {
+    const context = useContext(CartContext);
+    if (!context) {
+        throw new Error('useCart must be used within a CartProvider');
+    }
+    return context;
+}

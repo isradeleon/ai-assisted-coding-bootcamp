@@ -1,11 +1,14 @@
 import PropTypes from 'prop-types';
 import styles from './ProductCard.module.css';
+import { useCart } from '../../contexts/CartContext';
 
-function ProductCard({ item, onToggle, onChangeQuantity }) {
+function ProductCard({ item }) {
+    const { toggleCart, changeQuantity } = useCart();
+
     return (
         <div
             className={`${styles.product} ${item.isInBag ? styles.inBag : ''}`}
-            onClick={() => onToggle(item.id)}
+            onClick={() => toggleCart(item.id)}
             style={{ cursor: 'pointer' }}
         >
             <div className={styles.photo}>
@@ -17,11 +20,11 @@ function ProductCard({ item, onToggle, onChangeQuantity }) {
 
                 {item.isInBag && (
                     <div className={styles.quantityArea} onClick={(e) => e.stopPropagation()}>
-                        <button onClick={() => onChangeQuantity(item.id, -1)} disabled={item.quantity <= 1}>
+                        <button onClick={() => changeQuantity(item.id, -1)} disabled={item.quantity <= 1}>
                             -
                         </button>
                         <span className={styles.quantity}>{item.quantity}</span>
-                        <button onClick={() => onChangeQuantity(item.id, 1)}>+</button>
+                        <button onClick={() => changeQuantity(item.id, 1)}>+</button>
                     </div>
                 )}
             </div>
@@ -38,8 +41,6 @@ ProductCard.propTypes = {
         isInBag: PropTypes.bool.isRequired,
         quantity: PropTypes.number.isRequired,
     }).isRequired,
-    onToggle: PropTypes.func.isRequired,
-    onChangeQuantity: PropTypes.func.isRequired,
 };
 
 export default ProductCard;

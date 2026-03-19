@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
 import styles from './CartSummary.module.css';
+import { useCart } from '../../contexts/CartContext';
 
-function CartSummary({ cartItems, totalItems, totalPrice }) {
+function CartSummary() {
+    const { cartItems, totalItems, totalPrice } = useCart();
+
     return (
         <section className={styles.summary}>
             <strong>Order Summary</strong>
@@ -37,17 +40,6 @@ function CartSummary({ cartItems, totalItems, totalPrice }) {
     );
 }
 
-CartSummary.propTypes = {
-    cartItems: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.number.isRequired,
-            name: PropTypes.string.isRequired,
-            price: PropTypes.number.isRequired,
-            quantity: PropTypes.number.isRequired,
-        }).isRequired
-    ).isRequired,
-    totalItems: PropTypes.number.isRequired,
-    totalPrice: PropTypes.string.isRequired,
-};
+CartSummary.propTypes = {};
 
 export default CartSummary;

@@ -1,35 +1,23 @@
 import PropTypes from 'prop-types';
 import styles from './ProductList.module.css';
 import ProductCard from '../ProductCard/ProductCard';
+import { useCart } from '../../contexts/CartContext';
 
-function ProductList({ items, onToggle, onChangeQuantity }) {
+function ProductList() {
+    const { items } = useCart();
+
     return (
         <section className={styles.items}>
             {items.map((item) => (
                 <ProductCard
                     key={item.id}
                     item={item}
-                    onToggle={onToggle}
-                    onChangeQuantity={onChangeQuantity}
                 />
             ))}
         </section>
     );
 }
 
-ProductList.propTypes = {
-    items: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.number.isRequired,
-            name: PropTypes.string.isRequired,
-            photo: PropTypes.string.isRequired,
-            price: PropTypes.number.isRequired,
-            isInBag: PropTypes.bool.isRequired,
-            quantity: PropTypes.number.isRequired,
-        }).isRequired
-    ).isRequired,
-    onToggle: PropTypes.func.isRequired,
-    onChangeQuantity: PropTypes.func.isRequired,
-};
+ProductList.propTypes = {};
 
 export default ProductList;
