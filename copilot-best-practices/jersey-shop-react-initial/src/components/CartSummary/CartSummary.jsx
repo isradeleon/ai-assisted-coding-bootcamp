@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import './CartSummary.css';
+import styles from './CartSummary.module.css';
 
 function CartSummary({ cartItems, totalItems, totalPrice }) {
     return (
-        <section className="summary">
+        <section className={styles.summary}>
             <strong>Order Summary</strong>
             <table>
                 <thead>

@@ -8,7 +8,7 @@
   border-radius: 20px 20px 0 0;
 }
 
-.product.selected {
+.inBag {
   border: 3px solid rgb(220, 75, 39);
 }
 
@@ -25,12 +25,17 @@
   line-height: 15px;
 }
 
-.description .price {
+.name {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.price {
   font-weight: bold;
   margin: 4px auto;
 }
 
-.quantity-area {
+.quantityArea {
   padding: 12px;
   margin-top: 16px;
   box-sizing: border-box;
@@ -38,26 +43,26 @@
   font-size: 18px;
 }
 
-.quantity-area button {
+.quantityArea button {
   width: 26px;
   height: 26px;
   margin: 0 6px;
   display: inline-flex;
   justify-content: center;
-  vertical-align: baseline;
-  align-items: center;
-  cursor: pointer;
-  border: none;
-  border-radius: 4px;
-  font-size: 22px;
-  background-color: rgb(223, 223, 223);
+  vertical-align: bas
+.product {
+  padding-top: 12px;
+  border: 1px solid lightgrey;
+  margin: 12px;
+  flex: 0 0 calc(33.333% - 36px);
+  cursolor: rgb(223, 223, 223);
 }
 
-.quantity-area .quantity {
+.quantity {
   font-weight: bold;
   margin: 0 4px;
 }
 
-.quantity-area button:focus {
+.quantityArea button:focus {
   outline: 0;
 }

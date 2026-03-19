@@ -1,26 +1,26 @@
 import PropTypes from 'prop-types';
-import './ProductCard.css';
+import styles from './ProductCard.module.css';
 
 function ProductCard({ item, onToggle, onChangeQuantity }) {
     return (
         <div
-            className={`product ${item.isInBag ? 'in-bag' : ''}`}
+            className={`${styles.product} ${item.isInBag ? styles.inBag : ''}`}
             onClick={() => onToggle(item.id)}
             style={{ cursor: 'pointer' }}
         >
-            <div className="photo">
+            <div className={styles.photo}>
                 <img src={`./img/${item.photo}`} alt={item.name} />
             </div>
-            <div className="description">
-                <span className="name">{item.name}</span>
-                <span className="price">$ {item.price.toFixed(2)}</span>
+            <div className={styles.description}>
+                <span className={styles.name}>{item.name}</span>
+                <span className={styles.price}>$ {item.price.toFixed(2)}</span>
 
                 {item.isInBag && (
-                    <div className="quantity-area" onClick={(e) => e.stopPropagation()}>
+                    <div className={styles.quantityArea} onClick={(e) => e.stopPropagation()}>
                         <button onClick={() => onChangeQuantity(item.id, -1)} disabled={item.quantity <= 1}>
                             -
                         </button>
-                        <span className="quantity">{item.quantity}</span>
+                        <span className={styles.quantity}>{item.quantity}</span>
                         <button onClick={() => onChangeQuantity(item.id, 1)}>+</button>
                     </div>
                 )}

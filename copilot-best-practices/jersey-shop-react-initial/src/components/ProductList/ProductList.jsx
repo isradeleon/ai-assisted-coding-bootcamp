@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import './ProductList.css';
+import styles from './ProductList.module.css';
 import ProductCard from '../ProductCard/ProductCard';
 
 function ProductList({ items, onToggle, onChangeQuantity }) {
     return (
-        <section className="items">
+        <section className={styles.items}>
             {items.map((item) => (
                 <ProductCard
                     key={item.id}
