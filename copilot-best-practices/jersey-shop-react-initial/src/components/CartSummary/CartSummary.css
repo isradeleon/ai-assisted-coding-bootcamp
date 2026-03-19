@@ -1,0 +1,23 @@
+.summary {
+  background-color: rgb(245, 245, 245);
+  padding: 30px;
+  min-height: 200px;
+  min-width: 200px;
+  text-align: center;
+}
+
+.summary strong {
+  font-size: 14px;
+}
+
+.summary table {
+  width: 100%;
+  padding-top: 12px;
+  font-size: 16px;
+  margin: auto;
+}
+
+.summary table tbody tr:last-of-type th {
+  border-top: 1px solid black;
+  padding: 10px 0;
+}

@@ -1,3 +1,6 @@
+import PropTypes from 'prop-types';
+import './CartSummary.css';
+
 function CartSummary({ cartItems, totalItems, totalPrice }) {
     return (
         <section className="summary">
@@ -33,5 +36,18 @@ function CartSummary({ cartItems, totalItems, totalPrice }) {
         </section>
     );
 }
+
+CartSummary.propTypes = {
+    cartItems: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
+            price: PropTypes.number.isRequired,
+            quantity: PropTypes.number.isRequired,
+        }).isRequired
+    ).isRequired,
+    totalItems: PropTypes.number.isRequired,
+    totalPrice: PropTypes.string.isRequired,
+};
 
 export default CartSummary;
