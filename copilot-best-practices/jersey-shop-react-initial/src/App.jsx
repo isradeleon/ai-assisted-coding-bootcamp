@@ -8,7 +8,6 @@ function App() {
 
     return (
         <>
-            <h4>{shopName}</h4>
             <ProductList items={items} onToggle={toggleCart} onChangeQuantity={changeQuantity} />
             <CartSummary cartItems={cartItems} totalItems={totalItems} totalPrice={totalPrice} />
         </>
