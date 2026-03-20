@@ -25,3 +25,7 @@ The folder structure has been updated to be more organized:
 ## How to use
 
 Simply open the `index.html` file in your browser to view the website.
+
+## BTW
+
+BTW Gemini created this README file for me, I'm really surprised even though it did some weird stuff, it was pretty good.
