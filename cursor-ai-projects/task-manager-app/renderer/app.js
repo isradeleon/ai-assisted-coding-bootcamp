@@ -41,6 +41,7 @@ function statusToBadge(dataStatus) {
 function createCard(task) {
   const card = document.createElement("article");
   card.className = "card";
+  card.draggable = true;
 
   const title = document.createElement("h3");
   title.className = "card-title";
@@ -63,6 +64,7 @@ function createCard(task) {
   const select = document.createElement("select");
   select.className = "mini-select";
   select.setAttribute("aria-label", "Change task status");
+  select.draggable = false;
 
   for (const s of STATUSES) {
     const opt = document.createElement("option");
@@ -88,6 +90,7 @@ function createCard(task) {
   del.type = "button";
   del.title = "Delete task";
   del.setAttribute("aria-label", "Delete task");
+  del.draggable = false;
   del.innerHTML =
     '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 16h10l1-16"/></svg>';
 
@@ -109,6 +112,28 @@ function createCard(task) {
   card.appendChild(title);
   card.appendChild(meta);
   card.appendChild(actions);
+
+  // Drag & drop: move the task to the column you drop it on.
+  card.addEventListener("dragstart", (e) => {
+    // Avoid starting a drag when the user interacts with controls.
+    const target = e.target;
+    if (
+      target &&
+      typeof target.closest === "function" &&
+      (target.closest("select") || target.closest("button"))
+    ) {
+      e.preventDefault();
+      return;
+    }
+
+    card.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", task.id);
+  });
+
+  card.addEventListener("dragend", () => {
+    card.classList.remove("dragging");
+  });
 
   return card;
 }
@@ -135,6 +160,42 @@ function statusId(status) {
 function taskMatchesQuery(task, q) {
   if (!q) return true;
   return String(task.title ?? "").toLowerCase().includes(q);
+}
+
+function setupDragAndDrop() {
+  const columns = document.querySelectorAll(".column");
+  for (const col of columns) {
+    col.addEventListener("dragover", (e) => {
+      // Required for dropping to be allowed.
+      e.preventDefault();
+      col.classList.add("drag-over");
+      e.dataTransfer.dropEffect = "move";
+    });
+
+    col.addEventListener("dragleave", (e) => {
+      // Prevent flicker when moving between child elements inside the column.
+      if (col.contains(e.relatedTarget)) return;
+      col.classList.remove("drag-over");
+    });
+
+    col.addEventListener("drop", async (e) => {
+      e.preventDefault();
+      col.classList.remove("drag-over");
+
+      const id = e.dataTransfer.getData("text/plain");
+      const nextStatus = col.dataset.status;
+      if (!id || !nextStatus) return;
+
+      try {
+        await window.tasksApi.update({ id, status: nextStatus });
+        showToast(`Moved to "${nextStatus}"`, { variant: "success" });
+      } catch (err) {
+        showToast(err?.message || "Failed to move task", { variant: "error" });
+      }
+
+      await refresh();
+    });
+  }
 }
 
 async function refresh() {
@@ -194,6 +255,7 @@ searchInput.addEventListener("input", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   titleInput.focus();
+  setupDragAndDrop();
   refresh();
 });
 

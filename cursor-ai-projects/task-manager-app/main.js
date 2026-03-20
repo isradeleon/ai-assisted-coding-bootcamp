@@ -1,14 +1,27 @@
 const path = require("node:path");
-const { app, BrowserWindow, ipcMain } = require("electron");
-const Store = require("electron-store");
+const electron = require("electron");
+const { app, BrowserWindow } = electron;
 const { randomUUID } = require("node:crypto");
 
 const STATUSES = ["Pending", "In progress", "Done"];
 
-const store = new Store({
-  name: "tasks-store",
-  defaults: { tasks: [] },
-});
+let store;
+let storeInitPromise;
+
+async function getStore() {
+  if (store) return store;
+  if (!storeInitPromise) {
+    storeInitPromise = import("electron-store").then((mod) => {
+      const StoreCtor = mod?.default ?? mod;
+      store = new StoreCtor({
+        name: "tasks-store",
+        defaults: { tasks: [] },
+      });
+      return store;
+    });
+  }
+  return storeInitPromise;
+}
 
 function normalizeStatus(status) {
   const next = String(status ?? "");
@@ -16,61 +29,68 @@ function normalizeStatus(status) {
   return next;
 }
 
-function getTasks() {
-  return store.get("tasks");
+async function getTasks() {
+  const s = await getStore();
+  return s.get("tasks");
 }
 
-function setTasks(tasks) {
-  store.set("tasks", tasks);
+async function setTasks(tasks) {
+  const s = await getStore();
+  s.set("tasks", tasks);
 }
 
-ipcMain.handle("tasks:getAll", () => {
-  return getTasks();
-});
+function registerIpcHandlers() {
+  const ipcMain = electron.ipcMain;
+  if (!ipcMain) throw new Error("ipcMain is not available in this process.");
 
-ipcMain.handle("tasks:create", (event, payload) => {
-  const title = String(payload?.title ?? "").trim();
-  const status = normalizeStatus(payload?.status ?? "Pending");
+  ipcMain.handle("tasks:getAll", async () => {
+    return getTasks();
+  });
 
-  if (!title) throw new Error("Title is required");
+  ipcMain.handle("tasks:create", async (event, payload) => {
+    const title = String(payload?.title ?? "").trim();
+    const status = normalizeStatus(payload?.status ?? "Pending");
 
-  const tasks = getTasks();
-  const task = {
-    id: randomUUID(),
-    title,
-    status,
-    createdAt: Date.now(),
-  };
+    if (!title) throw new Error("Title is required");
 
-  // New tasks appear first.
-  tasks.unshift(task);
-  setTasks(tasks);
-  return task;
-});
+    const tasks = await getTasks();
+    const task = {
+      id: randomUUID(),
+      title,
+      status,
+      createdAt: Date.now(),
+    };
 
-ipcMain.handle("tasks:update", (event, payload) => {
-  const id = String(payload?.id ?? "");
-  const status = normalizeStatus(payload?.status);
+    // New tasks appear first.
+    tasks.unshift(task);
+    await setTasks(tasks);
+    return task;
+  });
 
-  const tasks = getTasks();
-  const idx = tasks.findIndex((t) => t.id === id);
-  if (idx === -1) throw new Error("Task not found");
+  ipcMain.handle("tasks:update", async (event, payload) => {
+    const id = String(payload?.id ?? "");
+    const status = normalizeStatus(payload?.status);
 
-  const next = tasks.slice();
-  next[idx] = { ...next[idx], status };
-  setTasks(next);
-  return next[idx];
-});
+    const tasks = await getTasks();
+    const idx = tasks.findIndex((t) => t.id === id);
+    if (idx === -1) throw new Error("Task not found");
 
-ipcMain.handle("tasks:delete", (event, payload) => {
-  const id = String(payload?.id ?? "");
-  const tasks = getTasks();
-  const next = tasks.filter((t) => t.id !== id);
+    const next = tasks.slice();
+    next[idx] = { ...next[idx], status };
+    await setTasks(next);
+    return next[idx];
+  });
 
-  if (next.length === tasks.length) throw new Error("Task not found");
-  setTasks(next);
-  return { ok: true };
-});
+  ipcMain.handle("tasks:delete", async (event, payload) => {
+    const id = String(payload?.id ?? "");
+    const tasks = await getTasks();
+    const next = tasks.filter((t) => t.id !== id);
+
+    if (next.length === tasks.length) throw new Error("Task not found");
+    await setTasks(next);
+    return { ok: true };
+  });
+}
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -90,6 +110,7 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  registerIpcHandlers();
   createWindow();
 
   app.on("activate", () => {

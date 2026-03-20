@@ -442,3 +442,19 @@ select:focus {
   transform: translateX(-50%) translateY(-6px);
 }
 
+.card[draggable="true"] {
+  cursor: grab;
+}
+
+.card.dragging {
+  opacity: 0.55;
+  cursor: grabbing;
+  transform: scale(0.99);
+}
+
+.column.drag-over {
+  border-color: rgba(96, 165, 250, 0.55);
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.10), rgba(167, 139, 250, 0.06));
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.18), 0 18px 60px rgba(0, 0, 0, 0.15);
+}
+
