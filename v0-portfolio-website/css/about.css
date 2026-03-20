@@ -1,0 +1,26 @@
+/* About Section */
+#about {
+  background: var(--bg-secondary);
+  margin: 0 -2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.about-content {
+  max-width: 800px;
+}
+
+.about-content h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.about-content p {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  font-size: 1.0625rem;
+}
+
+.about-content p strong {
+  color: var(--text-primary);
+}

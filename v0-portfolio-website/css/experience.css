@@ -1,0 +1,60 @@
+/* Experience Section */
+.experience-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.experience-item {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 2rem;
+  padding: 1.5rem;
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.experience-item:hover {
+  border-color: var(--accent);
+  transform: translateX(4px);
+}
+
+.experience-date {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.experience-details h3 {
+  font-size: 1.125rem;
+  margin-bottom: 0.25rem;
+}
+
+.experience-details .company {
+  color: var(--accent);
+  font-size: 0.9375rem;
+  margin-bottom: 0.75rem;
+}
+
+.experience-details p {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  margin-bottom: 1rem;
+}
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tech-tag {
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--accent);
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
