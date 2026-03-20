@@ -1,0 +1,8 @@
+node_modules
+.electron-cache
+.npm-cache
+.home
+package-lock.json
+dist
+*.log
+

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vibe Task Manager</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <main class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+              <path
+                d="M4 13.2c0-3.7 3.3-7.2 8-7.2s8 3.5 8 7.2-3.3 6.8-8 6.8-8-3.1-8-6.8Z"
+                stroke="currentColor"
+                stroke-width="1.6"
+              />
+              <path
+                d="M7.3 13.1c1.3-2.5 3.7-4.1 6.7-4.1"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <div>
+            <h1>Vibe Task Manager</h1>
+            <p class="subtitle">Create, move, and ship.</p>
+          </div>
+        </div>
+
+        <div class="top-actions">
+          <div class="search">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input id="searchInput" type="search" placeholder="Search tasks..." />
+          </div>
+        </div>
+      </header>
+
+      <section class="panel create-panel">
+        <form id="createForm" class="create-form">
+          <div class="field">
+            <label for="titleInput">Task</label>
+            <input
+              id="titleInput"
+              type="text"
+              placeholder="e.g. Submit weekly report"
+              maxlength="140"
+              required
+            />
+          </div>
+          <div class="field">
+            <label for="statusInput">Status</label>
+            <select id="statusInput">
+              <option>Pending</option>
+              <option>In progress</option>
+              <option>Done</option>
+            </select>
+          </div>
+          <div class="actions">
+            <button class="btn primary" type="submit">Add task</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="board" aria-label="Task board">
+        <div class="column" data-status="Pending" id="col-Pending">
+          <div class="column-header">
+            <h2>Pending</h2>
+            <span class="count" id="count-Pending">0</span>
+          </div>
+          <div class="column-body" id="body-Pending"></div>
+        </div>
+
+        <div class="column" data-status="In progress" id="col-In-progress">
+          <div class="column-header">
+            <h2>In progress</h2>
+            <span class="count" id="count-In-progress">0</span>
+          </div>
+          <div class="column-body" id="body-In-progress"></div>
+        </div>
+
+        <div class="column" data-status="Done" id="col-Done">
+          <div class="column-header">
+            <h2>Done</h2>
+            <span class="count" id="count-Done">0</span>
+          </div>
+          <div class="column-body" id="body-Done"></div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        Tip: change a task’s status using the dropdown in each card, or delete it.
+      </footer>
+    </main>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
+
