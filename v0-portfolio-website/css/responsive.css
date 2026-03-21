@@ -83,4 +83,18 @@
   .tech-grid {
     grid-template-columns: 1fr;
   }
+
+  .android-graphic {
+    display: flex;
+    justify-content: center;
+  }
+
+  #hero {
+    display: flex;
+    justify-content: center;
+  }
+
+  #hero h1 {
+    margin-top: 77px;
+  }
 }
