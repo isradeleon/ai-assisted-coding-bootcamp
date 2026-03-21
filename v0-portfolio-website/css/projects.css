@@ -28,12 +28,13 @@
 
 .project-image {
   height: 200px;
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  /* background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); */
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
+  background-color: transparent;
 }
 
 .project-image svg {
@@ -47,7 +48,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.3) 100%);
+  background: linear-gradient(180deg, transparent 80%, rgba(0,0,0,0.1) 100%);
 }
 
 .project-content {
