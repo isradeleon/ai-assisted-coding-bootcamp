@@ -188,3 +188,21 @@ playAgainBtn.addEventListener('click', resetGame);
 
 // Initial state updates
 updateTurnIndicator();
+
+// Theme Toggle Logic
+const themeToggleBtn = document.getElementById('theme-toggle');
+
+// Listen for clicks on the theme toggle button and toggle light mode class
+themeToggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    
+    // Update the button icon based on current mode
+    if (document.body.classList.contains('light-mode')) {
+        themeToggleBtn.textContent = '🌙';
+        themeToggleBtn.setAttribute('title', 'Switch to Dark Mode');
+    } else {
+        themeToggleBtn.textContent = '☀️';
+        themeToggleBtn.setAttribute('title', 'Switch to Light Mode');
+    }
+});
+
