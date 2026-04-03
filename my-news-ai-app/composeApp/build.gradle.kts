@@ -1,5 +1,7 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import org.jetbrains.compose.internal.utils.getLocalProperty
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -13,6 +15,9 @@ plugins {
 
     // Room plugin
     alias(libs.plugins.room)
+
+    // BuildKonfig plugin to manage local API keys
+    id("com.codingfeline.buildkonfig")
 }
 
 kotlin {
@@ -116,6 +121,31 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+}
+
+
+/**
+ * Custom BuildKonfig block for simulating the
+ * classic BuildConfig behavior, but now for iOS as well.
+ */
+buildkonfig {
+    // Set the package name where the BuildKonfig object will be generated. This is required.
+    packageName = "com.isradeleon.mynewsapp"
+    // objectName = "YourAwesomeConfig"
+    // exposeObjectWithName = "YourAwesomePublicConfig"
+
+    defaultConfigs {
+        // Access the local.properties file
+        val apiKey = project.getLocalProperty("API_KEY") ?: ""
+
+        // Make api key required
+        require(apiKey.isNotEmpty()) {
+            "Register your api key from developer and place it in local.properties as `API_KEY`"
+        }
+
+        // Add the property to the generated BuildKonfig object
+        buildConfigField(STRING, "API_KEY", apiKey)
     }
 }
 
