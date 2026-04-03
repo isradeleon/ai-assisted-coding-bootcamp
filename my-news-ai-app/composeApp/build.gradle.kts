@@ -6,6 +6,13 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+
+    // Kotlin serialization & KSP plugins
+    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.ksp)
+
+    // Room plugin
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -29,6 +36,17 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+
+            // Ktor Android
+            implementation(libs.ktor.android)
+
+            // Koin Android
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+        }
+        iosMain.dependencies {
+            // Ktor iOS
+            implementation(libs.ktor.ios)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -39,6 +57,34 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+
+            // Ktor common
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.bundles.ktor)
+
+            // Coil for image loading
+            implementation(libs.coil.compose.core)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.core)
+            implementation(libs.coil.svg)
+            implementation(libs.coil.network.ktor)
+
+            // Koin Dependency Injection
+            api(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.compose.navigation)
+
+            // Room & SQLite
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
+
+            // Kotlin date time for multiplatform
+            implementation(libs.kotlin.date.time)
+
+            // Material icons
+            implementation(libs.material.icons.extended)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -73,7 +119,14 @@ android {
     }
 }
 
+// Room schema directory
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
+    // Room compiler
+    ksp(libs.room.compiler)
     debugImplementation(libs.compose.uiTooling)
 }
 
