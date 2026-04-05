@@ -3,7 +3,6 @@
 This is a News app built with Kotlin Multiplatform.
 It targets both mobile platforms, iOS and Android.
 The UI is shared with Compose Multiplatform.
-This app will be offline-first.
 
 ## Root Package
 * All app code is organized under the root package: `com.isradeleon.mynewsapp`

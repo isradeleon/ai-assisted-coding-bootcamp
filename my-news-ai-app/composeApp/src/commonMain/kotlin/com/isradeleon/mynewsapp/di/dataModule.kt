@@ -1,9 +1,12 @@
 package com.isradeleon.mynewsapp.di
 
+import com.isradeleon.mynewsapp.data.remote.NewsRemoteDataSource
+import com.isradeleon.mynewsapp.data.remote.NewsRemoteDataSourceImpl
 import org.koin.dsl.module
 
 val dataModule = module {
-    // Bind repository interfaces to implementations here
-    // e.g. single<NewsRepository> { NewsRepositoryImpl(get()) }
+    single<NewsRemoteDataSource> {
+        NewsRemoteDataSourceImpl(client = get())
+    }
 }
 
