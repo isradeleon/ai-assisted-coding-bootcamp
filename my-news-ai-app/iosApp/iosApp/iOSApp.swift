@@ -4,9 +4,8 @@ import ComposeApp
 @main
 struct iOSApp: App {
     init() {
-        MainViewControllerKt.doInitKoin(
-            iosSpecificModules: [PlatformModuleKt.platformModule]
-        )
+        MainViewControllerKt.doInitKoin()
+
         // Failing implementation for Koin initialization
         //KoinInitializerKt.initKoin(
           //  platformSpecificModules: [PlatformModuleKt.platformModule]
