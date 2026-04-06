@@ -1,9 +1,11 @@
 package com.isradeleon.mynewsapp.di
 
+import com.isradeleon.mynewsapp.presentation.viewmodel.LatestNewsViewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val presentationModule = module {
-    // Bind viewmodels here using Koin Compose integration
-    // e.g. viewModel { NewsViewModel(get()) }
+    // Bind view models here using Koin Compose integration
+    viewModel { LatestNewsViewModel(get()) }
 }
 
