@@ -1,5 +1,6 @@
 package com.isradeleon.mynewsapp.data.remote
 
+import com.isradeleon.mynewsapp.BuildKonfig
 import com.isradeleon.mynewsapp.data.model.NewsResponseDto
 import com.isradeleon.mynewsapp.common.Outcome
 import io.ktor.client.HttpClient
@@ -13,10 +14,10 @@ class NewsRemoteDataSourceImpl(
     private val client: HttpClient
 ) : NewsRemoteDataSource {
     private val baseUrl = "https://newsdata.io/api/1"
+    private val apiKey = BuildKonfig.API_KEY
+    private val language = "es"
 
     override suspend fun getLatestNews(
-        apiKey: String,
-        language: String,
         q: String?
     ): Outcome<NewsResponseDto> {
         return try {

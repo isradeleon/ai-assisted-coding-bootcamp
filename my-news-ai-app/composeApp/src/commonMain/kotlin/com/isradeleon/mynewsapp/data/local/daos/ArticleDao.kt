@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ArticleDao {
     @Query("SELECT * FROM articles")
-    fun observeArticles(): Flow<List<ArticleEntity>>
+    suspend fun getAllArticles(): List<ArticleEntity>
 
     @Upsert
     suspend fun insertArticles(articles: List<ArticleEntity>)

@@ -17,7 +17,7 @@ plugins {
     alias(libs.plugins.room)
 
     // BuildKonfig plugin to manage local API keys
-    id("com.codingfeline.buildkonfig")
+    alias(libs.plugins.buildkonfig)
 }
 
 kotlin {

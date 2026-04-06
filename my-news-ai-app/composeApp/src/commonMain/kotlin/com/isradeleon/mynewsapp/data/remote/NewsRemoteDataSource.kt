@@ -5,8 +5,6 @@ import com.isradeleon.mynewsapp.common.Outcome
 
 interface NewsRemoteDataSource {
     suspend fun getLatestNews(
-        apiKey: String,
-        language: String,
         q: String? = null
     ): Outcome<NewsResponseDto>
 }
