@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.isradeleon.mynewsapp.domain.model.Article
@@ -25,11 +26,12 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LatestNewsScreen(
+    modifier: Modifier,
     viewModel: LatestNewsViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
@@ -68,14 +70,19 @@ private fun ArticleList(articles: List<Article>) {
 private fun ArticleCard(article: Article) {
     Card(
         modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background, // Sets the background color
+            contentColor = MaterialTheme.colorScheme.onBackground        // Sets default color for child elements
+        ),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(4.dp),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             // Article image
             if (!article.imageUrl.isNullOrBlank()) {
                 AsyncImage(
                     model = article.imageUrl,
+                    contentScale = ContentScale.Crop,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
